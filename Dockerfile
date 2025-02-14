@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     libbz2-dev \
     libffi-dev \
+    libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://ollama.com/install.sh | sh
@@ -46,7 +47,5 @@ RUN poetry install --no-root
 
 RUN mkdir /app
 WORKDIR /app
-
-RUN /usr/local/bin/pip3.12 install notebook pysqlite2
 
 CMD ["ollama", "serve"]
