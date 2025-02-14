@@ -1,0 +1,73 @@
+repos:
+  # Basic pre-commit hooks for general file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0  # Use the latest stable version
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  # Black for code formatting
+  - repo: https://github.com/psf/black
+    rev: 23.9.1  # Use the latest stable version of Black
+    hooks:
+      - id: black
+        language_version: python3.12
+
+  # isort for sorting imports
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+      - id: isort
+        args:
+          - "--profile=black"  # Match Black's formatting style
+
+  # Ruff for linting and static analysis (faster alternative to flake8 + pylint)
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.1.0
+    hooks:
+      - id: ruff
+        args:
+          - "--fix"
+
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        args: ["--convention=google"]
+
+
+  # Mypy for type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.4.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-requests
+          - types-redis
+
+  # Pyupgrade for modernizing Python syntax (e.g., f-strings)
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.12.0
+    hooks:
+      - id: pyupgrade
+        args:
+          - "--py38-plus"
+
+  # Detect secrets to prevent sensitive data from being committed
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+
+  - repo: https://github.com/srstevenson/nb-clean
+    rev: 4.0.1
+    hooks:
+      - id: nb-clean
+    args:
+      - --remove-empty-cells
+      - --preserve-cell-metadata
+      - tags
+      - slideshow
+      - --
