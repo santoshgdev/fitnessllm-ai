@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSL https://ollama.com/install.sh | sh
+VOLUME /root/.ollama
+EXPOSE 11434
+
 RUN wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz \
     && tar xzf Python-3.12.2.tgz \
     && cd Python-3.12.2 \
@@ -43,4 +47,6 @@ RUN poetry install --no-root
 RUN mkdir /app
 WORKDIR /app
 
-CMD ["tail", "-f", "/dev/null"]
+RUN /usr/local/bin/pip3.12 install notebook pysqlite2
+
+CMD ["ollama", "serve"]
