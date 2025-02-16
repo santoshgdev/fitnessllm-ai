@@ -60,6 +60,9 @@ repos:
     rev: v1.4.0
     hooks:
       - id: detect-secrets
+        args:
+          - --exclude-files
+          - '.*\.ipynb$'
 
   - repo: https://github.com/srstevenson/nb-clean
     rev: 4.0.1

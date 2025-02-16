@@ -38,4 +38,3 @@ RUN poetry install --no-root
 RUN mkdir /app
 WORKDIR /app
 RUN apt-get purge build-essential -y
-
