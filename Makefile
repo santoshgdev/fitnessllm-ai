@@ -3,7 +3,7 @@ clean:
 	poetry install --sync
 
 build:
-	docker build . -t fitnessllm-ai
+	DOCKER_BUILDKIT=1 docker build . -t fitnessllm-ai --progress=plain
 
 test:
 	poetry run pytest --cov --cov-branch --cov-report=html
