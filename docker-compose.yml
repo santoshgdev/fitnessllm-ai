@@ -5,9 +5,6 @@ services:
       - "11434:11434"
     volumes:
       - ollama:/root/.ollama
-    post_start:
-      - command: ["sh", "-c", "ollama pull deepseek-r1:8b && ollama list"]
-        user: root
     environment:
       - OLLAMA_HOST="0.0.0.0"
     deploy:
@@ -32,6 +29,8 @@ services:
         --no-browser
         --allow-root
         --ip 0.0.0.0
+        --NotebookApp.token=''
+        --NotebookApp.password=''
     depends_on: [ollama]
     volumes:
         - .:/app

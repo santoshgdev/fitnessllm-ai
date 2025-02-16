@@ -33,6 +33,8 @@ RUN curl -sSL https://install.python-poetry.org | python3 - --version ${POETRY_V
 ENV PATH="$POETRY_HOME/bin:$PATH"
 COPY pyproject.toml poetry.lock ./
 
+RUN /usr/local/bin/pip3.12 install --upgrade pip
+
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-root
 RUN mkdir /app
