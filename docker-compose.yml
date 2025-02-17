@@ -15,35 +15,30 @@ services:
               count: 1
               capabilities: [gpu]
 
-  fitness-ai:
-    image: fitnessllm-ai:latest
-    ports: ["32001:32001", "8000:8000"]
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
-      - JUPYTER_ALLOW_ROOT=1
-    command: >
-      /usr/local/bin/python3.12 -m jupyter notebook
-        --notebook-dir=/app
-        --port=32001
-        --NotebookApp.port_retries=0
-        --no-browser
-        --allow-root
-        --ip 0.0.0.0
-        --NotebookApp.token=''
-        --NotebookApp.password=''
-    depends_on: [ollama]
-    volumes:
-        - .:/app
-        - .:/opt/project/notebook
-    deploy:
-      resources:
-        reservations:
-          devices: [{driver: nvidia, count: 1, capabilities: [gpu]}]
+#  fitness-ai:
+#    image: fitnessllm-ai:latest
+#    ports: ["32001:32001", "8000:8000"]
+#    environment:
+#      - OLLAMA_HOST=http://ollama:11434
+#      - JUPYTER_ALLOW_ROOT=1
+#    command: >
+#      /usr/local/bin/python3.12 -m jupyter notebook
+#        --notebook-dir=/app
+#        --port=32001
+#        --NotebookApp.port_retries=0
+#        --no-browser
+#        --allow-root
+#        --ip 0.0.0.0
+#        --NotebookApp.token='abc'
+#        --NotebookApp.password='abc'
+#    depends_on: [ollama]
+#    volumes:
+#        - .:/app
+#        - .:/opt/project/notebooks
+#    deploy:
+#      resources:
+#        reservations:
+#          devices: [{driver: nvidia, count: 1, capabilities: [gpu]}]
 
 volumes:
   ollama:
-
-
-networks:
-  app-network:
-    driver: bridge
