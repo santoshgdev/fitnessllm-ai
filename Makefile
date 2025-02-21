@@ -14,5 +14,9 @@ run:
 				   fitnessllm-ai:latest \
 				   zsh
 
+ollama:
+    docker run --gpus all --network fitnessllm_network -e OLLAMA_HOST=0.0.0.0 -p 11434:11434 --name ollama ollama/ollama
+
+
 check_gpu:
 	docker run --gpus all fitnessllm-ai nvidia-smi
