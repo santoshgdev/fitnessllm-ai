@@ -149,7 +149,7 @@ def get_bigquery_table_details(project_id: str, dataset_id: str) -> Dict:
                     table_name,
                     data_type,
                     is_nullable
-                FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.COLUMNS`
+                FROM {dataset_id}.INFORMATION_SCHEMA.COLUMNS
                 WHERE table_name = '{table_name}'
             """
             cols = client.query(col_query).result()
@@ -159,8 +159,8 @@ def get_bigquery_table_details(project_id: str, dataset_id: str) -> Dict:
             pk_query = f"""
                 SELECT 
                     ccu.column_name
-                FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_CONSTRAINTS` tc
-                JOIN `{project_id}.{dataset_id}.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE` ccu
+                FROM {dataset_id}.INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+                JOIN {dataset_id}.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu
                     ON tc.constraint_name = ccu.constraint_name
                 WHERE 
                     tc.table_name = '{table_name}'
@@ -176,10 +176,10 @@ def get_bigquery_table_details(project_id: str, dataset_id: str) -> Dict:
                     ccu.table_name AS foreign_table,
                     ccu.column_name AS foreign_column,
                     kcu.column_name AS local_column
-                FROM `{project_id}`.{dataset_id}.INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
-                JOIN `{project_id}`.{dataset_id}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+                FROM {dataset_id}.INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
+                JOIN {dataset_id}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
                     ON rc.constraint_name = kcu.constraint_name
-                JOIN `{project_id}`.{dataset_id}.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu
+                JOIN {dataset_id}.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu
                     ON rc.unique_constraint_name = ccu.constraint_name
                 WHERE kcu.table_name = '{table_name}'
             """
@@ -188,7 +188,7 @@ def get_bigquery_table_details(project_id: str, dataset_id: str) -> Dict:
 
             # 4. Get sample data (first 5 rows)
             sample_query = client.query(
-                f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` LIMIT 5"
+                f"SELECT * FROM {dataset_id}.{table_name} LIMIT 5"
             )
             table_data["sample_data"] = [
                 dict(row) for row in sample_query.result()
@@ -215,7 +215,8 @@ def get_bigquery_table_details(project_id: str, dataset_id: str) -> Dict:
 
 def _get_dataset_relationships(project_id: str, dataset_id: str) -> List[Dict]:
     """Identifies all dataset-level table relationships."""
-    client = bigquery.Client(project=project_id)
+    client = bigquery.Client(project=project_id,
+                             location="US")
     query = f"""
         SELECT
             rc.constraint_name,
@@ -223,10 +224,10 @@ def _get_dataset_relationships(project_id: str, dataset_id: str) -> List[Dict]:
             kcu.column_name AS from_column,
             ccu.table_name AS to_table,
             ccu.column_name AS to_column
-        FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS` rc
-        JOIN `{project_id}.{dataset_id}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE` kcu
+        FROM {dataset_id}.INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
+        JOIN {dataset_id}.INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
             ON rc.constraint_name = kcu.constraint_name
-        JOIN `{project_id}.{dataset_id}.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE` ccu
+        JOIN {dataset_id}.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu
             ON rc.unique_constraint_name = ccu.constraint_name
     """
     results = client.query(query).result()
