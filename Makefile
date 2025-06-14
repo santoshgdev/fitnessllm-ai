@@ -3,7 +3,8 @@ clean:
 	poetry install --sync
 
 build:
-	DOCKER_BUILDKIT=1 docker build . -t fitnessllm-ai --progress=plain
+#	docker build -f Dockerfile.base . -t base:latest
+	docker build -f Dockerfile.app . --build-arg BASE_IMAGE=base:latest -t fitnessllm-ai
 
 test:
 	poetry run pytest --cov --cov-branch --cov-report=html
@@ -13,9 +14,6 @@ run:
 				   -v ~/.config/gcloud:/root/.config/gcloud \
 				   fitnessllm-ai:latest \
 				   zsh
-
-ollama:
-    docker run --gpus all --network fitnessllm_network -e OLLAMA_HOST=0.0.0.0 -p 11434:11434 --name ollama ollama/ollama
 
 
 check_gpu:
