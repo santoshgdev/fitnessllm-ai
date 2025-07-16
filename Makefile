@@ -4,7 +4,7 @@ clean:
 
 build:
 #	docker build -f Dockerfile.base . -t base:latest
-	docker build -f Dockerfile.app . --build-arg BASE_IMAGE=base:latest -t fitnessllm-ai
+	docker build -f Dockerfile . --build-arg BASE_IMAGE=base:latest -t fitnessllm-ai
 
 test:
 	poetry run pytest --cov --cov-branch --cov-report=html

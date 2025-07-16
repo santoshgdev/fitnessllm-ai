@@ -5,6 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12.9"
 dependencies = [
+    "google-auth>=2.40.3",
+    "gspread>=6.2.1",
+    "pandas>=2.3.1",
+    "pandas-stubs>=2.3.0.250703",
     "sqlalchemy>=2.0.41",
     "sqlalchemy-bigquery[bqstorage]>=1.14.1",
 ]
