@@ -5,21 +5,23 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       build-essential
 
+
+RUN uv venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY pyproject.toml ./pyproject.toml
+
 RUN pip install --no-cache uv
 
-WORKDIR /var
-
-COPY pyproject.toml ./
-
-RUN uv lock \
- && uv sync
+RUN uv venv && \
+    uv lock && \
+    uv sync
 
 RUN git clone https://github.com/santoshgdev/fitnessllm-shared.git /tmp/fitnessllm-shared \
  && uv pip install -e /tmp/fitnessllm-shared
 
 WORKDIR /app
 
-#COPY fitnessllm_ai ./fitnessllm_ai
 COPY notebooks ./notebooks
 COPY tooling ./tooling
 

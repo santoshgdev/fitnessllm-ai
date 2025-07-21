@@ -13,7 +13,7 @@ run:
 	docker run -it -v ${CODE_PATH}/fitnessllm-dataplatform:/app/fitnessllm-ai \
 				   -v ~/.config/gcloud:/root/.config/gcloud \
 				   fitnessllm-ai:latest \
-				   zsh
+				   bash
 
 
 check_gpu:
