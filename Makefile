@@ -3,7 +3,6 @@ clean:
 	poetry install --sync
 
 build:
-#	docker build -f Dockerfile.base . -t base:latest
 	docker build -f Dockerfile . --build-arg BASE_IMAGE=base:latest -t fitnessllm-ai
 
 test:

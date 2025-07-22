@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/tooling/datasets/main.py",
-            "python": "/var/.venv/bin/python",
+            "python": "/opt/venv/bin/python",
             "console": "integratedTerminal",
             "env": {
                 "GOOGLE_SHEET": "${env:GOOGLE_SHEET}",

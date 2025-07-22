@@ -5,17 +5,15 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       build-essential
 
+RUN pip install --no-cache uv
 
-RUN uv venv /opt/venv
+RUN uv venv /opt/venv 
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY pyproject.toml ./pyproject.toml
 
-RUN pip install --no-cache uv
-
-RUN uv venv && \
-    uv lock && \
-    uv sync
+RUN uv lock && \
+    uv sync --active  # Use --active to sync to the active environment
 
 RUN git clone https://github.com/santoshgdev/fitnessllm-shared.git /tmp/fitnessllm-shared \
  && uv pip install -e /tmp/fitnessllm-shared
