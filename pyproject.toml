@@ -3,7 +3,7 @@ name = "fitnessllm-ai"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12.9"
+requires-python = ">=3.12.2"
 dependencies = [
     "google-auth>=2.40.3",
     "gspread>=6.2.1",

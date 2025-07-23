@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=python:3.13-slim
+ARG BASE_IMAGE=python:3.12.2-slim
 FROM ${BASE_IMAGE}
 
 RUN apt-get update \
@@ -10,16 +10,18 @@ RUN pip install --no-cache uv
 
 RUN uv venv /opt/venv 
 ENV PATH="/opt/venv/bin:$PATH"
-ENV VIRTUAL_ENV="/opt/venv"
 
 COPY pyproject.toml ./pyproject.toml
 
-# Use --python to explicitly target the existing venv
+# Now VIRTUAL_ENV is not set, so --python flag works correctly
 RUN uv lock && \
-    uv sync
+    uv sync --python /opt/venv/bin/python
+
+# Set VIRTUAL_ENV after sync so it doesn't interfere
+ENV VIRTUAL_ENV="/opt/venv"
 
 RUN git clone https://github.com/santoshgdev/fitnessllm-shared.git /tmp/fitnessllm-shared \
- && uv pip install -e /tmp/fitnessllm-shared
+ && uv pip install --python /opt/venv/bin/python -e /tmp/fitnessllm-shared
 
 WORKDIR /app
 
