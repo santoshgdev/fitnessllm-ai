@@ -12,5 +12,10 @@
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
     "workspaceFolder": "/workspace",
-    "remoteUser": "root"
+    "remoteUser": "root",
+    "mounts": [
+        "source=${localWorkspaceFolder}/../.config/fitnessllm/configs/service_accounts.json,target=/var/service_accounts.json,type=bind,consistency=cached",
+        "source=${localEnv:APPDATA}/gcloud,target=/root/.config/gcloud,type=bind,consistency=cached"
+    ],
+    "postCreateCommand": "if [ -f \"/var/service_accounts.json\" ]; then SERVICE_ACCOUNT_EMAIL_AI=$(jq -r .service_account_email /var/service_accounts.json); if [ -n \"$SERVICE_ACCOUNT_EMAIL_AI\" ] && [ \"$SERVICE_ACCOUNT_EMAIL_AI\" != \"null\" ]; then gcloud auth activate-service-account $SERVICE_ACCOUNT_EMAIL_AI; else echo 'WARNING: No valid service account configured in JSON. Skipping gcloud authentication.'; fi; else echo 'WARNING: Service accounts JSON file not found. Skipping gcloud authentication.'; fi"
 }

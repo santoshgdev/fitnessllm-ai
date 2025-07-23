@@ -11,10 +11,30 @@
             "program": "${workspaceFolder}/tooling/datasets/main.py",
             "python": "/opt/venv/bin/python",
             "console": "integratedTerminal",
+            "preLaunchTask": "load-config",
             "env": {
                 "GOOGLE_SHEET": "${env:GOOGLE_SHEET}",
-                "GOOGLE_APPLICATION_CREDENTIALS": "${env:GOOGLE_APPLICATION_CREDENTIALS}"
+                "GOOGLE_APPLICATION_CREDENTIALS": "${env:GOOGLE_APPLICATION_CREDENTIALS}",
+                "DATABASE_URL": "${env:DATABASE_URL}",
+                "API_KEY": "${env:API_KEY}",
+                "ENVIRONMENT": "${env:ENVIRONMENT}"
             }
-        }
+        },
+        {
+            "name": "Debug Config Loader",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "fitnessllm_shared.utils.config_loader",
+            "args": [
+                "${workspaceFolder}/../.config/fitnessllm-ai/config.json"
+            ],
+            "python": "/opt/venv/bin/python",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
     ]
 }
