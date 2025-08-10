@@ -8,23 +8,23 @@ RUN apt-get update \
 
 RUN pip install --no-cache uv
 
-RUN uv venv /opt/venv 
-ENV PATH="/opt/venv/bin:$PATH"
-
-COPY pyproject.toml ./pyproject.toml
-
-# Now VIRTUAL_ENV is not set, so --python flag works correctly
-RUN uv lock && \
-    uv sync --python /opt/venv/bin/python
-
-# Set VIRTUAL_ENV after sync so it doesn't interfere
-ENV VIRTUAL_ENV="/opt/venv"
-
-RUN git clone https://github.com/santoshgdev/fitnessllm-shared.git /tmp/fitnessllm-shared \
- && uv pip install --python /opt/venv/bin/python -e /tmp/fitnessllm-shared
-
+# Set up project directory first
 WORKDIR /app
 
+# Copy dependency files for installation (better caching)
+COPY pyproject.toml uv.lock* ./
+
+# Let uv create and manage its own .venv in the project directory
+RUN uv lock && uv sync
+
+# Update PATH and VIRTUAL_ENV to use uv's managed environment
+ENV PATH="/app/.venv/bin:$PATH"
+ENV VIRTUAL_ENV="/app/.venv"
+
+RUN git clone https://github.com/santoshgdev/fitnessllm-shared.git /tmp/fitnessllm-shared \
+ && uv pip install -e /tmp/fitnessllm-shared
+
+# Copy application code (separate layer for better caching)
 COPY notebooks ./notebooks
 COPY tooling ./tooling
 

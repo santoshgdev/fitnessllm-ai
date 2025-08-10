@@ -1,12 +1,15 @@
+import json
+
 import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 from google.cloud import bigquery
 from google.api_core.exceptions import BadRequest
 import os
+from bitwarden_sdk import BitwardenClient
 
 
-def validate_sql_from_sheet(sheet_url: str, creds_path: str):
+def validate_sql_from_sheet(sheet_url: str):
     """
     Reads question-SQL pairs from a Google Sheet and performs a BigQuery dry run.
 
@@ -17,7 +20,11 @@ def validate_sql_from_sheet(sheet_url: str, creds_path: str):
     # 1. Authenticate and access the Google Sheet
     try:
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-        creds = Credentials.from_service_account_file(creds_path, scopes=scope)
+        bw = BitwardenClient()
+        creds = bw.get_secret("/GCP/SERVICE_ACCOUNT/AI")
+        creds_dict = json.loads(creds)
+
+        creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
         client = gspread.authorize(creds)
 
         spreadsheet = client.open_by_url(sheet_url)
@@ -75,7 +82,7 @@ def validate_sql_from_sheet(sheet_url: str, creds_path: str):
 if __name__ == "__main__":
     # --- CONFIGURE YOUR DETAILS HERE ---
     # 1. Paste the URL of your Google Sheet
-    GOOGLE_SHEET_URL = os.environ["GOOGLE_SHEET"]
-
-    validate_sql_from_sheet(sheet_url=GOOGLE_SHEET_URL, creds_path=os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+    bw = BitwardenClient()
+    GOOGLE_SHEET_URL = bw.secrets().get("418e67ff-da31-4072-a20c-b32e00189960")
+    validate_sql_from_sheet(sheet_url=GOOGLE_SHEET_URL)
 

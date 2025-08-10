@@ -10,8 +10,8 @@
             ]
         }
     },
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
-    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
+    "workspaceFolder": "/app",
     "remoteUser": "root",
     "mounts": [
         "source=${localWorkspaceFolder}/../.config/fitnessllm/configs/service_accounts.json,target=/var/service_accounts.json,type=bind,consistency=cached",

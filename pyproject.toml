@@ -3,7 +3,7 @@ name = "fitnessllm-ai"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12.2"
+requires-python = "==3.12.2"
 dependencies = [
     "google-auth>=2.40.3",
     "gspread>=6.2.1",
@@ -11,4 +11,5 @@ dependencies = [
     "pandas-stubs>=2.3.0.250703",
     "sqlalchemy>=2.0.41",
     "sqlalchemy-bigquery[bqstorage]>=1.14.1",
+    "bitwarden-sdk (>=1.0.0,<2.0.0)",
 ]

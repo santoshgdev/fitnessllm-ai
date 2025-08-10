@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/tooling/datasets/main.py",
-            "python": "/opt/venv/bin/python",
+            "python": "/app/.venv/bin/python",
             "console": "integratedTerminal",
             "preLaunchTask": "load-config",
             "env": {
@@ -28,7 +28,7 @@
             "args": [
                 "${workspaceFolder}/../.config/fitnessllm-ai/config.json"
             ],
-            "python": "/opt/venv/bin/python",
+            "python": "/app/.venv/bin/python",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "justMyCode": false,
